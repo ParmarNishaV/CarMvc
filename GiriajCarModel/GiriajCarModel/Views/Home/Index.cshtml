@@ -1,0 +1,149 @@
+﻿@model GiriajCarModel.Models.CarModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<link href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" type="text/css" />
+
+<div>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal"> Add Product </button>
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-bordered table-striped" id="tblCarModel">
+                <thead>
+                    <tr>
+                        <th scope="col">Brand</th>
+                        <th scope="col">Model</th>
+                        <th scope="col">Year</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">New</th>
+                        <th scope="col">Edit</th>
+                        <th scope="col">Delete</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <script>
+
+        function submitForm() {
+            debugger;
+           
+            $.ajax({
+                url: "api/Car/AddCarModel", type: "POST",
+                data: $("#myModal form").serialize(),
+                success: function (result) {
+                    // handle success  
+                    location.reload(true);
+                },
+                error: function (xhr, status, error) {
+                    // handle error      
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            bindDatatable();
+        });
+
+        function bindDatatable() {
+
+            datatable = new DataTable('#tblCarModel', {
+                "sAjaxSource": "api/Car/GetCars",
+                "bServerSide": true,
+                "bProcessing": true,
+                "order": [[1, 'asc']],
+                "language": {
+                    "emptyTable": "No record found.",
+                    "processing":
+                        '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:#2a2b2b;"></i><span class="sr-only">Loading...</span> '
+                },
+                "columns": [
+                    {
+                        "data": "brand",
+                        "autoWidth": true,
+                        "searchable": true
+                    },
+                    {
+                        "data": "model",
+                        "autoWidth": true,
+                        "searchable": true
+                    },
+                    {
+                        "data": "year",
+                        "autoWidth": true,
+                        "searchable": false
+                    },
+                    {
+                        "data": "price",
+                        "autoWidth": true,
+                        "searchable": false
+                    },
+                    {
+                        "data": "new",
+                        "autoWidth": true,
+                        "searchable": false
+                    },
+                    {
+                        "data": "id",
+                        "autoWidth": true,
+                        "searchable": false
+                    },
+                    {
+                        "data": "id",
+                        "autoWidth": true,
+                        "searchable": false
+                    },
+                ]
+            });
+        }
+    </script>
+
+
+</div>
+
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header"> <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> <h4 class="modal-title" id="myModalLabel">Add Product</h4> </div> <div class="modal-body">
+                
+                <form>
+                
+                    <div class="form-group">
+                        <label>Model</label>
+                        <input type="text" class="form-control" asp-for="Model" />
+                        
+                    </div>
+                    <div class="form-group">
+                        <label>Brand</label>
+                        <input type="text" class="form-control" asp-for="Brand" />
+
+                    </div>
+                    <div class="form-group"> 
+                        <label>IsNew</label>
+                        <input type="checkbox"  asp-for="New" />
+                       
+                    </div> 
+                    <div class="form-group">
+                        <label>Price</label>
+                        <input type="text" class="form-control" asp-for="Price" />
+                        
+                    </div> 
+                    <div class="form-group">
+                        <label>Year</label>
+                        <input type="text" class="form-control" asp-for="Year" />
+                        
+                    </div> 
+                    <button type="button" class="btn btn-primary" onclick="submitForm()">
+                        Save changes
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
